@@ -47,7 +47,11 @@ async function generateUsername() {
 
 // Send verification email
 async function sendVerificationEmail(email, token, username) {
-    const verificationUrl = `${process.env.BASE_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
+    // Use Vercel URL in production, fallback to BASE_URL or localhost
+    const baseUrl = process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}` 
+        : (process.env.BASE_URL || 'http://localhost:3000');
+    const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
     
     const mailOptions = {
         from: 'support@forex24.vip',

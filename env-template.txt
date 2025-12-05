@@ -1,0 +1,17 @@
+# Copy this content to create your .env file
+# The .env file is already in .gitignore for security
+
+# MongoDB Connection String
+MONGODB_URI=mongodb+srv://personalkrishna17_db_user:Forex24@cluster0.f79pbvq.mongodb.net/forex24?retryWrites=true&w=majority
+
+# JWT Secret Key (use a strong random string)
+# Change this to a secure random string in production
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-forex24-2024
+
+# Base URL for email verification links
+# Change this to your domain when deploying (e.g., https://forex24.vip)
+BASE_URL=http://localhost:3000
+
+# Server Port
+PORT=3000
+

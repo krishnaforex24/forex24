@@ -62,9 +62,16 @@ mongoose.connect(MONGODB_URI)
     });
 
 // Start server (will work even if MongoDB connection is pending)
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Open http://localhost:${PORT} in your browser`);
-});
+// For Vercel, export the app instead of listening
+// Vercel will handle the serverless function
+if (process.env.VERCEL) {
+    module.exports = app;
+} else {
+    // For local development
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`Open http://localhost:${PORT} in your browser`);
+    });
+}
 
