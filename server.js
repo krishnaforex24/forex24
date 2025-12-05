@@ -39,6 +39,48 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+// Serve all other HTML pages
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, 'about.html'));
+});
+
+app.get('/plans', (req, res) => {
+    res.sendFile(path.join(__dirname, 'plans.html'));
+});
+
+app.get('/contact', (req, res) => {
+    res.sendFile(path.join(__dirname, 'contact.html'));
+});
+
+app.get('/faq', (req, res) => {
+    res.sendFile(path.join(__dirname, 'faq.html'));
+});
+
+app.get('/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'privacy.html'));
+});
+
+app.get('/terms', (req, res) => {
+    res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
+// Fallback: serve HTML files by name (without .html extension)
+app.get('/:page', (req, res, next) => {
+    const page = req.params.page;
+    // Only serve if it's an HTML file and not an API route
+    if (!page.startsWith('api') && !page.includes('.')) {
+        const filePath = path.join(__dirname, `${page}.html`);
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                // If file doesn't exist, continue to next middleware
+                next();
+            }
+        });
+    } else {
+        next();
+    }
+});
+
 // MongoDB Connection
 // IMPORTANT: Set MONGODB_URI in .env file for security
 // Never commit .env file to git

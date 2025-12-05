@@ -48,9 +48,15 @@ async function generateUsername() {
 // Send verification email
 async function sendVerificationEmail(email, token, username) {
     // Use Vercel URL in production, fallback to BASE_URL or localhost
-    const baseUrl = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
-        : (process.env.BASE_URL || 'http://localhost:3000');
+    let baseUrl;
+    if (process.env.VERCEL_URL) {
+        baseUrl = `https://${process.env.VERCEL_URL}`;
+    } else if (process.env.BASE_URL) {
+        baseUrl = process.env.BASE_URL;
+    } else {
+        baseUrl = 'http://localhost:3000';
+    }
+    
     const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
     
     const mailOptions = {
@@ -72,10 +78,21 @@ async function sendVerificationEmail(email, token, username) {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        console.log('Attempting to send verification email to:', email);
+        console.log('Using base URL:', baseUrl);
+        console.log('Verification URL:', verificationUrl);
+        
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully! Message ID:', info.messageId);
         return true;
     } catch (error) {
         console.error('Email send error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            response: error.response
+        });
         return false;
     }
 }
@@ -117,11 +134,17 @@ router.post('/signup', async (req, res) => {
         await user.save();
 
         // Send verification email
-        await sendVerificationEmail(email, verificationToken, username);
+        const emailSent = await sendVerificationEmail(email, verificationToken, username);
+        
+        if (!emailSent) {
+            console.error('Failed to send verification email, but user was created');
+            // Still return success, but log the issue
+        }
 
         res.json({ 
             message: 'Account created! Please check your email to verify your account.',
-            username: username
+            username: username,
+            emailSent: emailSent
         });
     } catch (error) {
         console.error('Signup error:', error);
