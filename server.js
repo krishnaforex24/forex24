@@ -40,7 +40,14 @@ app.get('/admin', (req, res) => {
 });
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://personalkrishna17_db_user:Forex24@cluster0.f79pbvq.mongodb.net/forex24?retryWrites=true&w=majority';
+// IMPORTANT: Set MONGODB_URI in .env file for security
+// Never commit .env file to git
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+    console.error('ERROR: MONGODB_URI environment variable is not set!');
+    console.error('Please create a .env file with: MONGODB_URI=your_connection_string');
+    process.exit(1);
+}
 
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)

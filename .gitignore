@@ -6,4 +6,6 @@ test-mongodb.js
 create-admin.js
 reset-admin-password.js
 check-credentials.md
+.env.local
+.env.*.local
 

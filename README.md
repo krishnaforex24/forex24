@@ -18,13 +18,15 @@ A full-stack investment platform with user authentication, email verification, a
 npm install
 ```
 
-2. Create a `.env` file (optional, defaults are set in server.js):
+2. Create a `.env` file (REQUIRED for security):
 ```
-MONGODB_URI=mongodb+srv://personalkrishna17_db_user:hpyl8qrrWUk6hmyC@cluster0.f79pbvq.mongodb.net/forex24?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://your_username:your_password@cluster0.f79pbvq.mongodb.net/forex24?retryWrites=true&w=majority
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 BASE_URL=http://localhost:3000
 PORT=3000
 ```
+
+**IMPORTANT:** Never commit the `.env` file to git. It contains sensitive credentials.
 
 3. Start the server:
 ```bash

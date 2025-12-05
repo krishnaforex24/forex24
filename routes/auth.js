@@ -5,7 +5,14 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// IMPORTANT: Set JWT_SECRET in .env file for security
+// Never commit .env file to git
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error('ERROR: JWT_SECRET environment variable is not set!');
+    console.error('Please create a .env file with: JWT_SECRET=your_secret_key');
+    process.exit(1);
+}
 
 // SMTP Configuration for GoDaddy
 const transporter = nodemailer.createTransport({
