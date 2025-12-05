@@ -119,8 +119,9 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'Email already registered' });
         }
 
-        // Generate verification token and username
+        // Generate verification token, OTP, and username
         const verificationToken = crypto.randomBytes(32).toString('hex');
+        const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
         const username = await generateUsername();
 
         // Create user
@@ -138,7 +139,7 @@ router.post('/signup', async (req, res) => {
         await user.save();
 
         // Send verification email
-        const emailSent = await sendVerificationEmail(email, verificationToken, username);
+        const emailSent = await sendVerificationEmail(email, verificationToken, username, otp);
         
         if (!emailSent) {
             console.error('Failed to send verification email, but user was created');
