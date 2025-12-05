@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema({
     emailVerificationToken: {
         type: String
     },
+    emailVerificationOTP: {
+        type: String
+    },
+    otpExpiresAt: {
+        type: Date
+    },
     totalBalance: {
         type: Number,
         default: 0

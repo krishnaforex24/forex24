@@ -46,13 +46,13 @@ async function generateUsername() {
 }
 
 // Send verification email
-async function sendVerificationEmail(email, token, username) {
-    // Use Vercel URL in production, fallback to BASE_URL or localhost
+async function sendVerificationEmail(email, token, username, otp) {
+    // Always use BASE_URL if set (should be custom domain), otherwise use Vercel URL or localhost
     let baseUrl;
-    if (process.env.VERCEL_URL) {
+    if (process.env.BASE_URL) {
+        baseUrl = process.env.BASE_URL.replace(/\/$/, ''); // Remove trailing slash
+    } else if (process.env.VERCEL_URL) {
         baseUrl = `https://${process.env.VERCEL_URL}`;
-    } else if (process.env.BASE_URL) {
-        baseUrl = process.env.BASE_URL;
     } else {
         baseUrl = 'http://localhost:3000';
     }
@@ -68,10 +68,12 @@ async function sendVerificationEmail(email, token, username) {
                 <h2 style="color: #0066ff;">Welcome to Forex24!</h2>
                 <p>Thank you for signing up. Please verify your email address to activate your account.</p>
                 <p><strong>Your username:</strong> ${username}</p>
-                <p>Click the button below to verify your email:</p>
+                <p><strong>Your verification OTP:</strong> <span style="font-size: 24px; font-weight: bold; color: #0066ff; letter-spacing: 3px;">${otp}</span></p>
+                <p style="margin-top: 20px;">Click the button below to verify your email:</p>
                 <a href="${verificationUrl}" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #00d4ff, #0066ff); color: white; text-decoration: none; border-radius: 6px; margin: 20px 0;">Verify Email</a>
                 <p>Or copy and paste this link in your browser:</p>
                 <p style="color: #666; word-break: break-all;">${verificationUrl}</p>
+                <p style="margin-top: 20px; padding: 15px; background: #f5f7fa; border-radius: 6px;"><strong>Alternative:</strong> If the link doesn't work, you can verify using the OTP code above at <a href="${baseUrl}/verify-otp" style="color: #0066ff;">${baseUrl}/verify-otp</a></p>
                 <p>If you didn't create this account, please ignore this email.</p>
             </div>
         `
@@ -128,6 +130,8 @@ router.post('/signup', async (req, res) => {
             password,
             username,
             emailVerificationToken: verificationToken,
+            emailVerificationOTP: otp,
+            otpExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // OTP expires in 24 hours
             isEmailVerified: false
         });
 
@@ -221,10 +225,56 @@ router.get('/verify-email', async (req, res) => {
                 <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
                     <h2 style="color: #ff0000;">Verification failed</h2>
                     <p>An error occurred. Please try again later.</p>
+                    <p>You can also verify using OTP at <a href="/verify-otp" style="color: #0066ff;">/verify-otp</a></p>
                     <a href="/login" style="color: #0066ff;">Go to Login</a>
                 </body>
             </html>
         `);
+    }
+});
+
+// Verify Email with OTP
+router.post('/verify-otp', async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({ error: 'Email and OTP are required' });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.isEmailVerified) {
+            return res.status(400).json({ error: 'Email already verified' });
+        }
+
+        // Check if OTP matches and is not expired
+        if (user.emailVerificationOTP !== otp) {
+            return res.status(401).json({ error: 'Invalid OTP code' });
+        }
+
+        if (user.otpExpiresAt && new Date() > user.otpExpiresAt) {
+            return res.status(401).json({ error: 'OTP has expired. Please request a new one.' });
+        }
+
+        // Verify email
+        user.isEmailVerified = true;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationOTP = undefined;
+        user.otpExpiresAt = undefined;
+        await user.save();
+
+        res.json({ 
+            message: 'Email verified successfully!',
+            username: user.username
+        });
+    } catch (error) {
+        console.error('OTP verification error:', error);
+        res.status(500).json({ error: 'Server error. Please try again.' });
     }
 });
 

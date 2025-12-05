@@ -39,6 +39,10 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+app.get('/verify-otp', (req, res) => {
+    res.sendFile(path.join(__dirname, 'verify-otp.html'));
+});
+
 // Serve all other HTML pages
 app.get('/about', (req, res) => {
     res.sendFile(path.join(__dirname, 'about.html'));
