@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.log
+.DS_Store
+test-mongodb.js
+create-admin.js
+reset-admin-password.js
+check-credentials.md
+

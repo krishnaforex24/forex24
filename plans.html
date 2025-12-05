@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Plans - Forex24</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #0066ff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 102, 255, 0.3);
+        }
+
+        .page-hero {
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .page-hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 4rem 5%;
+        }
+
+        .plans-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .plan-card {
+            background: white;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            border-color: #0066ff;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .plan-card.tier-1 {
+            border-top: 4px solid #00d4ff;
+        }
+
+        .plan-card.tier-2 {
+            border-top: 4px solid #0066ff;
+        }
+
+        .plan-card.tier-3 {
+            border-top: 4px solid #0066ff;
+        }
+
+        .plan-card.tier-4 {
+            border-top: 4px solid #0066ff;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+        }
+
+        .plan-tier {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .plan-range {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .plan-profit {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-description {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .plan-button {
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .plan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 102, 255, 0.3);
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .page-hero h1 {
+                font-size: 2rem;
+            }
+
+            .page-hero p {
+                font-size: 1rem;
+            }
+
+            nav {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .plans-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Forex24</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="plans.html">Plans</a>
+            <a href="contact.html">Contact</a>
+            <a href="about.html">About</a>
+            <a href="index.html" class="btn-primary">Sign In</a>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <h1>Investment Plans</h1>
+        <p>Choose the plan that best fits your investment goals and financial capacity</p>
+    </section>
+
+    <section>
+        <div class="plans-container">
+            <div class="plan-card tier-1">
+                <div class="plan-tier">Tier 1 — Starter Plan</div>
+                <div class="plan-range">$5,000 – $14,999</div>
+                <div class="plan-profit">5% – 6%</div>
+                <div class="plan-description">Ideal for new investors entering the platform with low risk and stable returns.</div>
+                <button class="plan-button">Select Plan</button>
+            </div>
+
+            <div class="plan-card tier-2">
+                <div class="plan-tier">Tier 2 — Growth Plan</div>
+                <div class="plan-range">$15,000 – $39,999</div>
+                <div class="plan-profit">6% – 7%</div>
+                <div class="plan-description">Balanced profit return for investors looking for steady portfolio growth.</div>
+                <button class="plan-button">Select Plan</button>
+            </div>
+
+            <div class="plan-card tier-3">
+                <div class="plan-tier">Tier 3 — Advanced Plan</div>
+                <div class="plan-range">$40,000 – $69,999</div>
+                <div class="plan-profit">7% – 8%</div>
+                <div class="plan-description">Higher reward bracket designed for medium–high commitment investors.</div>
+                <button class="plan-button">Select Plan</button>
+            </div>
+
+            <div class="plan-card tier-4">
+                <div class="plan-tier">Tier 4 — Elite Plan</div>
+                <div class="plan-range">$70,000 – $100,000++</div>
+                <div class="plan-profit">8% – 9%</div>
+                <div class="plan-description">Premium tier with the highest return range for long-term, high-value investors.</div>
+                <button class="plan-button">Select Plan</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+            <a href="https://t.me/fx24support" target="_blank">Telegram</a>
+        </div>
+        <p>© 2025 Forex24. All rights reserved.</p>
+        <p style="font-size: 0.85rem; color: #999;">Join our community and start investing with confidence today.</p>
+    </footer>
+</body>
+</html>
+
